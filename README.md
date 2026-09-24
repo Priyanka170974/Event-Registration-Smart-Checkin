@@ -108,7 +108,7 @@ Set the backend values in `backend/.env`:
 ```dotenv
 MONGO_URI=mongodb+srv://<username>:<password>@<cluster-host>/<database>?retryWrites=true&w=majority
 JWT_SECRET=replace-with-a-random-secret-at-least-32-characters-long
-PORT=5000
+PORT=5003
 CLIENT_URL=http://localhost:5173
 JWT_EXPIRES_IN=7d
 ```
@@ -116,7 +116,7 @@ JWT_EXPIRES_IN=7d
 The root `.env.example` documents the same variables. The frontend file contains:
 
 ```dotenv
-VITE_API_URL=http://localhost:5000/api
+VITE_API_URL=http://localhost:5003/api
 ```
 
 Never put real credentials in source code, `.env.example`, screenshots, or the ZIP archive. `.env` files are ignored by Git.
@@ -130,6 +130,10 @@ MONGO_URI=mongodb://<url-encoded-username>:<url-encoded-password>@<seed-host-1>:
 ```
 
 Use the actual seed hostnames, ports, replica-set name, database, and application name shown by Atlas. Keep the credentials URL-encoded, keep TLS enabled, and never commit the resulting URI. The application still uses the same `MONGO_URI` configuration and Mongoose connection path; no frontend or architectural changes are required.
+
+### Local standalone MongoDB during development
+
+A local standalone `mongod` does not support MongoDB transactions. In development only, the backend detects this and uses an atomic capacity reservation with compensating rollback so local registration testing still works. Production startup rejects standalone MongoDB; production must use MongoDB Atlas or another replica-set deployment so the transactional registration path is used.
 
 The backend loads `backend/.env` through `dotenv/config` before reading configuration. Run backend commands from the `backend` directory (or use the root scripts), and verify that the file is named exactly `.env` — not `env`, `.env.local`, or `.env.example`.
 
@@ -165,7 +169,7 @@ Alternatively, from the project root:
 npm run dev
 ```
 
-The API health endpoint is available at `http://localhost:5000/health`.
+The API health endpoint is available at `http://localhost:5003/health`.
 
 For a production-style frontend build:
 
@@ -209,7 +213,7 @@ cd backend
 npm test
 ```
 
-The test database is temporary test infrastructure. The running application always uses `MONGO_URI` and MongoDB Atlas; it does not use a mock API or an in-memory database.
+The test database is temporary test infrastructure. The application always connects through the configured `MONGO_URI`; production must use MongoDB Atlas (or another replica-set deployment), while local standalone MongoDB is supported only as a clearly marked development fallback.
 
 Frontend verification:
 

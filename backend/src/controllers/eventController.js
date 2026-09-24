@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { databaseSupportsTransactions } from '../config/db.js';
 import { Event } from '../models/Event.js';
 import { Registration } from '../models/Registration.js';
 import { ApiError } from '../utils/ApiError.js';
@@ -145,19 +146,28 @@ export const deleteEvent = asyncHandler(async (req, res) => {
     throw new ApiError(403, 'You can only manage events you created.', 'NOT_EVENT_OWNER');
   }
 
-  const session = await mongoose.startSession();
-  try {
-    await session.withTransaction(async () => {
-      const deleted = await Event.findOneAndDelete(
-        { _id: req.params.id, organizer: req.user._id },
-        { session },
-      );
-      if (!deleted) throw new ApiError(404, 'Event not found.', 'EVENT_NOT_FOUND');
-
-      await Registration.deleteMany({ event: req.params.id }, { session });
+  if (!databaseSupportsTransactions()) {
+    await Registration.deleteMany({ event: req.params.id });
+    const deleted = await Event.findOneAndDelete({
+      _id: req.params.id,
+      organizer: req.user._id,
     });
-  } finally {
-    await session.endSession();
+    if (!deleted) throw new ApiError(404, 'Event not found.', 'EVENT_NOT_FOUND');
+  } else {
+    const session = await mongoose.startSession();
+    try {
+      await session.withTransaction(async () => {
+        const deleted = await Event.findOneAndDelete(
+          { _id: req.params.id, organizer: req.user._id },
+          { session },
+        );
+        if (!deleted) throw new ApiError(404, 'Event not found.', 'EVENT_NOT_FOUND');
+
+        await Registration.deleteMany({ event: req.params.id }, { session });
+      });
+    } finally {
+      await session.endSession();
+    }
   }
 
   res.json({ message: 'Event and its registrations were deleted successfully.' });
