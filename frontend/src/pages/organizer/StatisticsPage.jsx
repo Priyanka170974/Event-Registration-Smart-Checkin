@@ -1,0 +1,16 @@
+import { BarChart3, CalendarDays, CheckCircle2, Target, Users } from 'lucide-react';
+import { PageIntro } from '../../components/layout/PageIntro';
+import { StatCard } from '../../components/common/StatCard';
+import { PageLoader } from '../../components/common/Loader';
+import { ProgressBar } from '../../components/common/ProgressBar';
+import { EmptyState } from '../../components/common/EmptyState';
+import { DashboardEventTable } from '../../components/events/DashboardEventTable';
+import { useApiData } from '../../hooks/useApiData';
+
+export function StatisticsPage() {
+  const { data, loading, error, refetch } = useApiData('/dashboard/overview');
+  if (loading && !data) return <PageLoader />;
+  const summary = data?.summary || {};
+  const events = data?.events || [];
+  return <div className="dashboard-page"><PageIntro eyebrow="LIVE INSIGHTS" title="Statistics that tell the story." description="Every number below is queried from your event data, not a placeholder."><button className="button button-secondary" onClick={refetch}>Refresh data</button></PageIntro>{error && <div className="form-alert">{error}</div>}<div className="stat-grid"><StatCard label="Total events" value={summary.totalEvents ?? 0} icon={CalendarDays} tone="teal" /><StatCard label="Total capacity" value={summary.totalCapacity ?? 0} icon={Target} tone="blue" /><StatCard label="Total registered" value={summary.totalRegistered ?? 0} icon={Users} tone="amber" /><StatCard label="Check-in rate" value={`${summary.checkInPercentage ?? 0}%`} detail={`${summary.totalCheckedIn ?? 0} checked in`} icon={CheckCircle2} tone="green" /></div><div className="statistics-grid"><section className="analytics-card"><div className="table-card-header"><div><span className="eyebrow">CHECK-IN PROGRESS</span><h2>Attendance by event</h2></div><BarChart3 size={20} className="heading-icon" /></div>{events.length ? events.map((event) => <div className="event-analytics" key={event._id}><div className="event-analytics-heading"><div><strong>{event.name}</strong><span>{event.checkedIn} of {event.registered} guests checked in</span></div><strong>{event.checkInPercentage}%</strong></div><ProgressBar value={event.checkedIn} max={event.registered || 1} tone="green" /><div className="event-analytics-foot"><span>{event.registered} / {event.capacity} seats filled</span><span>{event.remainingSeats} remaining</span></div></div>) : <EmptyState title="No statistics yet" description="Create an event and registrations will appear here." />}</section><section className="analytics-card capacity-card"><span className="eyebrow">CAPACITY HEALTH</span><div className="capacity-donut" style={{ '--fill': `${summary.totalCapacity ? Math.round((summary.totalRegistered / summary.totalCapacity) * 100) : 0}%` }}><div><strong>{summary.totalCapacity ? Math.round((summary.totalRegistered / summary.totalCapacity) * 100) : 0}%</strong><span>filled</span></div></div><h2>{summary.remainingSeats ?? 0} seats still open</h2><p>Across {summary.totalEvents ?? 0} event{summary.totalEvents === 1 ? '' : 's'} in your workspace.</p></section></div>{events.length > 0 && <div className="section-block-header"><div><span className="eyebrow">DETAILED VIEW</span><h2>All event activity</h2></div></div>}{events.length > 0 && <DashboardEventTable events={events} />}</div>;
+}
