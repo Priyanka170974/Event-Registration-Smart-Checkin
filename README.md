@@ -282,3 +282,17 @@ EventFlow helps organizers manage event registrations and attendee check-ins eff
 - Volunteer dashboard for QR scanning and ticket verification
 - Prevention of duplicate check-ins
 - Live registration and check-in statistics
+
+
+
+
+## Contributing
+
+Contributions and suggestions to improve EventFlow are welcome.
+
+1. Fork the repository.
+2. Create a new branch for your changes.
+3. Commit your changes with a clear message.
+4. Open a pull request describing your improvement.
+
+Please ensure that your changes are tested before submitting a pull request.
