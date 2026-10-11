@@ -267,3 +267,17 @@ All protected routes use `Authorization: Bearer <JWT>`.
 ## ZIP handoff
 
 The workspace is ready to be compressed as `Event-Registration-Smart-Checkin.zip`. Exclude `node_modules`, `.env`, `frontend/dist`, logs, and generated PDFs before sharing. The source tree includes both `package.json` files, lockfiles, `.env.example` files, tests, and this README.
+
+
+
+
+
+## Project Overview
+
+Event Registration & Smart Check-in Platform helps organizers manage event registrations and check-ins efficiently.
+
+### Key Features
+- Event registration and capacity management
+- Unique ticket IDs for attendees
+- Smart check-in for volunteers
+- Registration and check-in tracking
