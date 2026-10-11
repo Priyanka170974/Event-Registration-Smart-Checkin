@@ -274,9 +274,11 @@ The workspace is ready to be compressed as `Event-Registration-Smart-Checkin.zip
 
 ## Project Overview
 
-This section provides an overview of the project, its main features, and its purpose.
+EventFlow helps organizers manage event registrations and attendee check-ins efficiently while enforcing event capacity limits.
 
 ### Key Features
-- Simple and clear project documentation
-- Overview of the application's functionality
-- Setup instructions for developers
+- Event registration with capacity management
+- Unique ticket IDs and downloadable PDF tickets with QR codes
+- Volunteer dashboard for QR scanning and ticket verification
+- Prevention of duplicate check-ins
+- Live registration and check-in statistics
