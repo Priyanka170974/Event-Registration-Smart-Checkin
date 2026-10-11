@@ -267,3 +267,16 @@ All protected routes use `Authorization: Bearer <JWT>`.
 ## ZIP handoff
 
 The workspace is ready to be compressed as `Event-Registration-Smart-Checkin.zip`. Exclude `node_modules`, `.env`, `frontend/dist`, logs, and generated PDFs before sharing. The source tree includes both `package.json` files, lockfiles, `.env.example` files, tests, and this README.
+
+
+
+
+
+## Project Overview
+
+This section provides an overview of the project, its main features, and its purpose.
+
+### Key Features
+- Simple and clear project documentation
+- Overview of the application's functionality
+- Setup instructions for developers
