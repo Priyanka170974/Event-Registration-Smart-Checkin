@@ -274,10 +274,11 @@ The workspace is ready to be compressed as `Event-Registration-Smart-Checkin.zip
 
 ## Project Overview
 
-Event Registration & Smart Check-in Platform helps organizers manage event registrations and check-ins efficiently.
+EventFlow helps organizers manage event registrations and attendee check-ins efficiently while enforcing event capacity limits.
 
 ### Key Features
-- Event registration and capacity management
-- Unique ticket IDs for attendees
-- Smart check-in for volunteers
-- Registration and check-in tracking
+- Event registration with capacity management
+- Unique ticket IDs and downloadable PDF tickets with QR codes
+- Volunteer dashboard for QR scanning and ticket verification
+- Prevention of duplicate check-ins
+- Live registration and check-in statistics
